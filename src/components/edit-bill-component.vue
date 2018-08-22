@@ -79,7 +79,6 @@ export default class EditBill extends Vue {
     return this.$store.state.bills;
   }
 }
-// https://jsfiddle.net/mvwcqt43/
 </script>
 
 <style scoped>

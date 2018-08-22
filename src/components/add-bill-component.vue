@@ -79,7 +79,6 @@ export default class AddBill extends Vue {
     }
   }
 }
-// https://jsfiddle.net/mvwcqt43/
 </script>
 
 <style scoped>
