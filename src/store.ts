@@ -1,17 +1,31 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { firebaseMutations, firebaseAction } from 'vuexfire';
+import { billsCollection } from '@/firestoreConfig';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+billsCollection.orderBy('dayOfMonth', 'asc').onSnapshot(querySnapshot => {
+  let billsArray: Array<any> = [];
+  querySnapshot.forEach(doc => {
+    let bill = doc.data();
+    bill.id = doc.id;
+    billsArray.push(bill);
+  });
+  store.commit('setBills', billsArray);
+});
+
+export const store = new Vuex.Store({
   state: {
     bills: []
   },
-  mutations: firebaseMutations,
-  actions: {
-    setBillsRef: firebaseAction(({ bindFirebaseRef }, ref) => {
-      bindFirebaseRef('bills', ref);
-    })
+
+  mutations: {
+    setBills(state, val) {
+      if (val) {
+        state.bills = val;
+      } else {
+        state.bills = [];
+      }
+    }
   }
 });

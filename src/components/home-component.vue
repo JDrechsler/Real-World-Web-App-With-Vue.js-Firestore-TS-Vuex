@@ -61,18 +61,19 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { billsRefSorted } from '@/firestore.ts';
 import Settings from '@/components/settings-component.vue';
 import Card from '@/components/card-component.vue';
 import Overview from '@/components/overview-component.vue';
 import AddBill from '@/components/add-bill-component.vue';
+import EditBill from '@/components/edit-bill-component.vue';
 
 @Component({
   components: {
     'settings-comp': Settings,
     'card-comp': Card,
     'overview-comp': Overview,
-    'add-bill-comp': AddBill
+    'add-bill-comp': AddBill,
+    'edit-bill-comp': EditBill
   }
 })
 export default class Home extends Vue {
@@ -88,7 +89,6 @@ export default class Home extends Vue {
 
   created() {
     this.enableNotifications();
-    this.$store.dispatch('setBillsRef', billsRefSorted);
   }
 
   enableNotifications() {

@@ -48,28 +48,31 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Card from '@/components/card-component.vue';
 
-@Component({})
+@Component({
+  components: {
+    'card-comp': Card
+  }
+})
 export default class EditBill extends Vue {
   @Prop() propbill!: Bill;
 
-  updatedBill!: Bill;
+  updatedBill: Bill = Object.assign({}, this.propbill);
 
-  created() {
-    this.updatedBill = Object.assign({}, this.propbill);
-  }
+  created() {}
 
   updateBill(bill: Bill) {
     if (this.updatedBill.title.trim()) {
       //@ts-ignore
-      this.$billsRef.doc(bill.id).update(bill);
+      // this.$billsRef.doc(bill.id).update(bill);
       console.log('updated', bill.title);
     }
   }
 
   deleteBill(bill: Bill) {
     //@ts-ignore
-    this.$billsRef.doc(bill.id).delete();
+    // this.$billsRef.doc(bill.id).delete();
     console.log('deleted', bill.title);
   }
 
