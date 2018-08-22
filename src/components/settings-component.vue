@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { billsCollection } from '@/firestoreConfig';
 
 @Component({
   components: {}
@@ -31,15 +32,13 @@ export default class Settings extends Vue {
 
   markAllBillsAsPaid() {
     for (let bill of this.bills) {
-      // @ts-ignore
-      this.$billsRef.doc(bill.id).update({ isPaid: true });
+      billsCollection.doc(bill.id).update({ isPaid: true });
     }
   }
 
   markAllBillsAsUnpaid() {
     for (let bill of this.bills) {
-      // @ts-ignore
-      this.$billsRef.doc(bill.id).update({ isPaid: false });
+      billsCollection.doc(bill.id).update({ isPaid: false });
     }
   }
 

@@ -49,6 +49,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import Card from '@/components/card-component.vue';
+import { billsCollection } from '@/firestoreConfig';
 
 @Component({
   components: {
@@ -64,15 +65,13 @@ export default class EditBill extends Vue {
 
   updateBill(bill: Bill) {
     if (this.updatedBill.title.trim()) {
-      //@ts-ignore
-      // this.$billsRef.doc(bill.id).update(bill);
+      billsCollection.doc(bill.id).update(bill);
       console.log('updated', bill.title);
     }
   }
 
   deleteBill(bill: Bill) {
-    //@ts-ignore
-    // this.$billsRef.doc(bill.id).delete();
+    billsCollection.doc(bill.id).delete();
     console.log('deleted', bill.title);
   }
 

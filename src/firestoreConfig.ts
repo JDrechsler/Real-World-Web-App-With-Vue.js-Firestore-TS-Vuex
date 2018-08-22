@@ -3,7 +3,6 @@ import 'firebase/firestore';
 
 // Initialize Firebase
 const config = {
-  apiKey: 'AIzaSyCJXGDc2kvyJSOSzu_hvhS64sHDnyKn_qE',
   authDomain: 'billersapp.firebaseapp.com',
   databaseURL: 'https://billersapp.firebaseio.com',
   projectId: 'billersapp',

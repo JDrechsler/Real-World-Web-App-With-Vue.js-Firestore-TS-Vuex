@@ -42,8 +42,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-
 import Card from '@/components/card-component.vue';
+import { billsCollection } from '@/firestoreConfig';
 
 @Component({
   components: {
@@ -64,15 +64,18 @@ export default class AddBill extends Vue {
   created() {
     let today = new Date();
     this.newBill.dayOfMonth = today.getDate();
-    //@ts-ignore
-    this.newBill.id = this.$billsRef.doc().id;
+    let newId = billsCollection.doc().id;
+    this.newBill.id = newId;
   }
 
-  addBill() {
+  async addBill() {
     if (this.newBill.title.trim()) {
-      //@ts-ignore
-      this.$billsRef.add(this.newBill);
-      console.log('added', this.newBill.title);
+      try {
+        await billsCollection.doc(this.newBill.id).set(this.newBill);
+        console.log('added', this.newBill.title);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }
