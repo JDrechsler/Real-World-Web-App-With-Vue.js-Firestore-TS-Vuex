@@ -11,6 +11,10 @@
     <div class="layout-padding">
       <card-comp :propbill="updatedBill"></card-comp>
 
+      <q-field label="Auto Pay:">
+        <q-toggle v-model="updatedBill.autoPay" color='positive'></q-toggle>
+      </q-field>
+
       <q-field label="Title:">
         <q-input v-model="updatedBill.title" type="text"></q-input>
       </q-field>
@@ -23,12 +27,12 @@
         <q-input v-model="updatedBill.dayOfMonth" type="number"></q-input>
       </q-field>
 
-      <q-field label="Paid Status:">
-        <q-toggle v-model="updatedBill.isPaid" color='positive'></q-toggle>
-      </q-field>
-
       <q-field label="Image Url:">
         <q-input v-model="updatedBill.imageUrl" type="url"></q-input>
+      </q-field>
+
+      <q-field label="Paid Status:">
+        <q-toggle v-model="updatedBill.isPaid" color='positive'></q-toggle>
       </q-field>
 
       <br>

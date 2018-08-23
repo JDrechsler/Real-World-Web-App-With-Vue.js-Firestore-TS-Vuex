@@ -5,4 +5,7 @@
 </template>
 
 <style>
+.q-field-label-inner.row.items-center {
+  color: black;
+}
 </style>

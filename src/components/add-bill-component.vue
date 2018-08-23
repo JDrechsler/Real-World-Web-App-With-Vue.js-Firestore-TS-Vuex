@@ -12,6 +12,10 @@
 
       <card-comp :propbill="newBill"></card-comp>
 
+      <q-field label="Auto Pay:">
+        <q-toggle v-model="newBill.autoPay" color='positive'></q-toggle>
+      </q-field>
+
       <q-field label="Title:">
         <q-input v-model="newBill.title" type="text"></q-input>
       </q-field>
@@ -53,6 +57,7 @@ import { billsCollection } from '@/firestoreConfig';
 export default class AddBill extends Vue {
   newBill: Bill = {
     isPaid: false,
+    autoPay: false,
     dayOfMonth: 1,
     imageUrl:
       'https://visualpharm.com/assets/432/iOS%20Application%20Placeholder-595b40b75ba036ed117d63a8.svg',

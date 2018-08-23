@@ -88,7 +88,24 @@ export default class Home extends Vue {
   selectedBill: Bill = this.createEmptyBill();
 
   created() {
+    this.enableServiceWorker();
     this.enableNotifications();
+    this.checkAutoPayBills();
+  }
+
+  enableServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const reg = await navigator.serviceWorker.register('./sw.js');
+          console.log('Registration successful. Scope is ' + reg.scope);
+        } catch (error) {
+          console.log('Registration failed.', error);
+        }
+      });
+    } else {
+      console.log('no sw possibility');
+    }
   }
 
   enableNotifications() {
@@ -106,9 +123,9 @@ export default class Home extends Vue {
           navigator.serviceWorker.ready.then(registration => {
             registration.showNotification('Notification test was successful', {
               body: '$1',
-              icon: 'assets/icon.png'
-              // vibrate: [200, 100, 200, 100, 200, 100, 200],
-              // badge: 'assets/icon.png'
+              icon: 'assets/icon.png',
+              vibrate: [200, 100, 200, 100, 200, 100, 200],
+              badge: 'assets/icon.png'
               // image: 'http://www.leveragedloan.com/wp-content/uploads/2018/01/netflix-logo.png'
             });
           });
@@ -120,6 +137,14 @@ export default class Home extends Vue {
     }
   }
 
+  checkAutoPayBills(): void {
+    this.unpaidBills
+      .filter(bill => bill.autoPay && bill.dayOfMonth === new Date().getDate())
+      .map(bills => {
+        console.log(bills);
+      });
+  }
+
   editSelectedBill(bill: Bill) {
     this.selectedBill = bill;
     this.editModalOpened = true;
@@ -129,6 +154,7 @@ export default class Home extends Vue {
     return {
       id: '',
       isPaid: false,
+      autoPay: false,
       dayOfMonth: 1,
       imageUrl: '',
       title: '',
@@ -171,7 +197,6 @@ export default class Home extends Vue {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   will-change: scroll-position;
-  contain: size style layout;
   background: linear-gradient(45deg, #6cfd9f, #6887ff);
 }
 </style>
