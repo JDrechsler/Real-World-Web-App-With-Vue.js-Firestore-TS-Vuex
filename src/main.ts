@@ -4,15 +4,61 @@ import router from './router';
 import { store } from './store';
 
 import './styles/quasar.styl';
-import 'quasar-extras/animate';
-import 'quasar-extras/roboto-font';
 import 'quasar-extras/material-icons';
-// @ts-ignore
-import Quasar from 'quasar';
-import 'quasar-framework/dist/umd/quasar.mat.min.css';
+
+import Quasar, {
+  QLayout,
+  QBtn,
+  QLayoutHeader,
+  QToolbar,
+  QToolbarTitle,
+  QPageContainer,
+  QPage,
+  QPageSticky,
+  QFab,
+  QFabAction,
+  QCard,
+  QIcon,
+  QModal,
+  QModalLayout,
+  QField,
+  QToggle,
+  QInput,
+  QItem,
+  QItemTile,
+  QItemSide,
+  QItemMain,
+  QCollapsible,
+  QList
+  //@ts-ignore
+} from 'quasar-framework';
 
 Vue.use(Quasar, {
-  config: {}
+  components: [
+    QLayout,
+    QBtn,
+    QLayoutHeader,
+    QToolbar,
+    QToolbarTitle,
+    QPageContainer,
+    QPage,
+    QPageSticky,
+    QFab,
+    QFabAction,
+    QCard,
+    QIcon,
+    QModal,
+    QModalLayout,
+    QField,
+    QToggle,
+    QInput,
+    QItem,
+    QItemTile,
+    QItemSide,
+    QItemMain,
+    QCollapsible,
+    QList
+  ]
 });
 
 Vue.config.productionTip = false;
