@@ -1,6 +1,3 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
-
 module.exports = {
   pluginOptions: {
     quasar: {
@@ -12,8 +9,7 @@ module.exports = {
       alias: {
         quasar: `node_modules/quasar-framework/dist/quasar.mat.esm.js`
       }
-    },
-    plugins: [new BundleAnalyzerPlugin()]
+    }
   },
   filenameHashing: false,
   productionSourceMap: false,
