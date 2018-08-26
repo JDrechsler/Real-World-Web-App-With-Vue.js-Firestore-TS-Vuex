@@ -5,7 +5,7 @@ self.addEventListener('install', (/** @type {ExtendableEvent} */ event) => {
 self.addEventListener('activate', async () => {
   console.log('SW: Activate Event');
 
-  setInterval(checkBillsToday, 1000 * 60);
+  setInterval(checkBillsToday, 1000 * 60 * 10); // every 10 minutes
 });
 
 async function checkBillsToday() {
