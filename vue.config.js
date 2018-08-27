@@ -1,4 +1,5 @@
 module.exports = {
+  baseUrl: '/Real-World-Web-App-With-Vue.js-Firestore-TS-Vuex/',
   outputDir: 'docs',
   pluginOptions: {
     quasar: {
