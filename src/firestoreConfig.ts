@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/messaging';
 
 // Initialize Firebase
 const config = {
@@ -16,7 +17,14 @@ const db = firebase.firestore();
 const settings = { timestampsInSnapshots: true };
 db.settings(settings);
 
-// firebase collections
+// firebase billers collection
 const billsCollection = db.collection('billers');
+// firebase devices collections
+const devicesCollection = db.collection('devices');
 
-export { db, billsCollection };
+const messaging = firebase.messaging();
+navigator.serviceWorker.ready.then(swReg => {
+  messaging.useServiceWorker(swReg);
+});
+
+export { db, billsCollection, devicesCollection, messaging };

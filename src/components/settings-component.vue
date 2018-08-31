@@ -6,10 +6,11 @@
       <q-toolbar-title>
         Settings
       </q-toolbar-title>
-      Version 0.2
+      Version 0.3
     </q-toolbar>
 
     <div class="layout-padding">
+      <q-btn icon="add_alert" class="full-width mb30" color="primary" label="Allow Push Notifications" @click="askForPermissionToReceiveNotifications"></q-btn>
       <q-btn icon="refresh" class="full-width mb30" color="primary" label="Refresh Page" @click="reloadPage"></q-btn>
       <q-btn color="positive" v-close-overlay class="full-width mb30" label="Mark All Bills As Paid" @click="markAllBillsAsPaid"></q-btn>
       <q-btn color="negative" v-close-overlay class="full-width mb30" label="Mark All Bills As Unpaid" @click="markAllBillsAsUnpaid"></q-btn>
@@ -20,12 +21,31 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { billsCollection } from '@/firestoreConfig';
+import { billsCollection, messaging } from '@/firestoreConfig';
 
 @Component({
   components: {}
 })
 export default class Settings extends Vue {
+  async askForPermissionToReceiveNotifications() {
+    let token = '';
+    try {
+      await messaging.requestPermission();
+      console.log('Notification permission granted.');
+      const getToken = await messaging.getToken();
+      console.log(getToken);
+      if (getToken !== null) {
+        token = getToken;
+      } else {
+        token = '';
+      }
+      return token;
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
+  }
+
   reloadPage() {
     window.location.reload();
   }

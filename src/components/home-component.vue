@@ -89,7 +89,6 @@ export default class Home extends Vue {
 
   created() {
     this.enableServiceWorker();
-    this.enableNotifications();
     this.checkAutoPayBills();
   }
 
@@ -105,35 +104,6 @@ export default class Home extends Vue {
       });
     } else {
       console.log('no sw possibility');
-    }
-  }
-
-  enableNotifications() {
-    if ('Notification' in window) {
-      //@ts-ignore
-      if (Notification.permission === 'granted') {
-        return;
-      }
-      Notification.requestPermission().then(res => {
-        console.log(res);
-        if (res !== 'granted') {
-          console.log('permission was denied for notifications');
-          //alert('denied...')
-        } else {
-          navigator.serviceWorker.ready.then(registration => {
-            registration.showNotification('Notification test was successful', {
-              body: '$1',
-              icon: 'assets/icon.png',
-              vibrate: [200, 100, 200, 100, 200, 100, 200],
-              badge: 'assets/icon.png'
-              // image: 'http://www.leveragedloan.com/wp-content/uploads/2018/01/netflix-logo.png'
-            });
-          });
-        }
-      });
-    } else {
-      //alert("This browser does not support notifications, I am sorry :/")
-      console.log('This browser does not support notifications :/');
     }
   }
 
