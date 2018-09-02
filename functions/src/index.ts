@@ -1,8 +1,5 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-const regTokens = [
-  'coVLlHGoMmI:APA91bGbnS8KZLRCaTwd9vNMJjdgsKpWB2-zFVN79KHGfn8DBLomvOKegCFc1eAeZpetQkg6WU45heVef5HSJbn-vaTtQTT0Hl0fGWH8NhfY1uKAl2Q_w7xKXFXD7bzLx15rgHh8CoSE'
-];
 
 admin.initializeApp(functions.config().firebase);
 admin.firestore().settings({ timestampsInSnapshots: true });
@@ -37,14 +34,23 @@ export const checkBills = functions.https.onRequest(
     if (bills.length > 0) {
       console.log(bills);
 
+      const deviceIdsQuerySnapshot = await admin
+        .firestore()
+        .collection('devices')
+        .get();
+
+      const deviceTokens = deviceIdsQuerySnapshot.docs.map(
+        doc => doc.data().token
+      );
+
+      const uniqueDeviceTokens = [...new Set(deviceTokens)];
+      console.log(uniqueDeviceTokens);
+
       bills.forEach(bill => {
-        regTokens.forEach(async regToken => {
+        uniqueDeviceTokens.forEach(async token => {
           const message: admin.messaging.Message = {
-            token: regToken,
-            data: {
-              title: bill.title,
-              imageUrl: bill.imageUrl
-            }
+            token: token,
+            data: { title: bill.title, imageUrl: bill.imageUrl }
           };
           try {
             const responseID = await admin.messaging().send(message);

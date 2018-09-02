@@ -10,9 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const regTokens = [
-    'coVLlHGoMmI:APA91bGbnS8KZLRCaTwd9vNMJjdgsKpWB2-zFVN79KHGfn8DBLomvOKegCFc1eAeZpetQkg6WU45heVef5HSJbn-vaTtQTT0Hl0fGWH8NhfY1uKAl2Q_w7xKXFXD7bzLx15rgHh8CoSE'
-];
 admin.initializeApp(functions.config().firebase);
 admin.firestore().settings({ timestampsInSnapshots: true });
 exports.tsTest = functions.https.onRequest((request, response) => {
@@ -40,14 +37,18 @@ exports.checkBills = functions.https.onRequest((request, response) => __awaiter(
         .filter(bill => bill.dayOfMonth === new Date().getDate());
     if (bills.length > 0) {
         console.log(bills);
+        const deviceIdsQuerySnapshot = yield admin
+            .firestore()
+            .collection('devices')
+            .get();
+        const deviceTokens = deviceIdsQuerySnapshot.docs.map(doc => doc.data().token);
+        const uniqueDeviceTokens = [...new Set(deviceTokens)];
+        console.log(uniqueDeviceTokens);
         bills.forEach(bill => {
-            regTokens.forEach((regToken) => __awaiter(this, void 0, void 0, function* () {
+            uniqueDeviceTokens.forEach((token) => __awaiter(this, void 0, void 0, function* () {
                 const message = {
-                    token: regToken,
-                    data: {
-                        title: bill.title,
-                        imageUrl: bill.imageUrl
-                    }
+                    token: token,
+                    data: { title: bill.title, imageUrl: bill.imageUrl }
                 };
                 try {
                     const responseID = yield admin.messaging().send(message);
@@ -64,4 +65,3 @@ exports.checkBills = functions.https.onRequest((request, response) => __awaiter(
     }
     response.send('Messages sent');
 }));
-//# sourceMappingURL=index.js.map

@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { billsCollection, messaging } from '@/firestoreConfig';
+import { billsCollection, devicesCollection, messaging } from '@/firestoreConfig';
 
 @Component({
   components: {}
@@ -36,6 +36,9 @@ export default class Settings extends Vue {
       console.log(getToken);
       if (getToken !== null) {
         token = getToken;
+        await devicesCollection.add({
+          token: token
+        })
       } else {
         token = '';
       }

@@ -42,32 +42,3 @@ self.addEventListener('activate', async event => {
 self.addEventListener('message', function(event) {
   console.log('SW Received Message: ' + event.data);
 });
-
-// async function checkBillsToday() {
-//   const docsRes = await fetch(
-//     'https://firestore.googleapis.com/v1beta1/projects/billersapp/databases/(default)/documents/billers?key=AIzaSyCJXGDc2kvyJSOSzu_hvhS64sHDnyKn_qE'
-//   );
-//   const docsData = await docsRes.json();
-
-//   const bills = docsData.documents.map(data => data.fields);
-//   const billsTodayUnpaid = bills
-//     .filter(
-//       bills => bills.dayOfMonth.integerValue === new Date().getDate().toString()
-//     )
-//     .filter(billToday => billToday.isPaid.booleanValue === false);
-
-//   billsTodayUnpaid.forEach(billTodayUnpaid => {
-//     console.log(billTodayUnpaid);
-
-//     try {
-//       self.registration.showNotification(
-//         `${billTodayUnpaid.title.stringValue} due today!`,
-//         {
-//           body: `${billTodayUnpaid.amount.integerValue}$`
-//         }
-//       );
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   });
-// }

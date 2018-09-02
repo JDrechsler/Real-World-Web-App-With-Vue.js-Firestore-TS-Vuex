@@ -4,6 +4,7 @@ import { billsCollection } from '@/firestoreConfig';
 
 Vue.use(Vuex);
 
+//TODO maybe move this to home-component?
 billsCollection.orderBy('dayOfMonth', 'asc').onSnapshot(querySnapshot => {
   let billsArray: Array<any> = [];
   querySnapshot.forEach(doc => {
