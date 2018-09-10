@@ -72,6 +72,7 @@ exports.checkBills = functions.https.onRequest((request, response) => __awaiter(
                     console.log('Message sent', responseID);
                 }
                 catch (error) {
+                    //TODO remove not working tokens
                     console.log(error);
                 }
             }));
