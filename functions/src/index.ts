@@ -75,6 +75,7 @@ export const checkBills = functions.https.onRequest(
             const responseID = await admin.messaging().send(message);
             console.log('Message sent', responseID);
           } catch (error) {
+            //TODO remove not working tokens
             console.log(error);
           }
         });
