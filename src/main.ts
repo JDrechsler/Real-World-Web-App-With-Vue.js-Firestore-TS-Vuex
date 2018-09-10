@@ -28,7 +28,8 @@ import Quasar, {
   QItemSide,
   QItemMain,
   QCollapsible,
-  QList
+  QList,
+  Notify
   //@ts-ignore
 } from 'quasar-framework';
 
@@ -56,7 +57,8 @@ Vue.use(Quasar, {
     QItemSide,
     QItemMain,
     QCollapsible,
-    QList
+    QList,
+    Notify
   ]
 });
 

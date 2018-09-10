@@ -34,7 +34,7 @@ exports.checkBills = functions.https.onRequest((request, response) => __awaiter(
         };
     })
         .filter(bill => !bill.isPaid)
-        .filter(bill => bill.dayOfMonth === new Date().getDate());
+        .filter(bill => bill.dayOfMonth <= new Date().getDate());
     if (bills.length > 0) {
         console.log(bills);
         const deviceIdsQuerySnapshot = yield admin
@@ -45,10 +45,27 @@ exports.checkBills = functions.https.onRequest((request, response) => __awaiter(
         const uniqueDeviceTokens = [...new Set(deviceTokens)];
         console.log(uniqueDeviceTokens);
         bills.forEach(bill => {
+            let dueMessage = 'due today!';
+            if (bill.dayOfMonth < new Date().getDate()) {
+                if (new Date().getDate() - bill.dayOfMonth === 1) {
+                    dueMessage = 'was due yesterday!!';
+                }
+                else {
+                    dueMessage = `was due ${new Date().getDate() -
+                        bill.dayOfMonth} days ago!!!`;
+                }
+            }
             uniqueDeviceTokens.forEach((token) => __awaiter(this, void 0, void 0, function* () {
                 const message = {
                     token: token,
-                    data: { title: bill.title, imageUrl: bill.imageUrl }
+                    webpush: {
+                        notification: {
+                            icon: 'https://billersapp.firebaseapp.com/img/icons/icon.ico',
+                            badge: 'https://billersapp.firebaseapp.com/img/icons/icon.ico',
+                            title: `${bill.title} ${dueMessage}`,
+                            image: bill.imageUrl
+                        }
+                    }
                 };
                 try {
                     const responseID = yield admin.messaging().send(message);
@@ -65,3 +82,4 @@ exports.checkBills = functions.https.onRequest((request, response) => __awaiter(
     }
     response.send('Messages sent');
 }));
+//# sourceMappingURL=index.js.map

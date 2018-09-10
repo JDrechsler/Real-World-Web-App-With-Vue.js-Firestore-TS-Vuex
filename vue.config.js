@@ -2,6 +2,7 @@ module.exports = {
   outputDir: 'dist',
   pluginOptions: {
     quasar: {
+      plugins: ['Notify'],
       theme: 'mat'
     }
   },

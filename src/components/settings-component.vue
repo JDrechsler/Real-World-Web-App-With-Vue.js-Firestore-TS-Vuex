@@ -11,6 +11,7 @@
 
     <div class="layout-padding">
       <q-btn icon="add_alert" class="full-width mb30" color="primary" label="Allow Push Notifications" @click="askForPermissionToReceiveNotifications"></q-btn>
+      <q-btn icon="feedback" class="full-width mb30" color="primary" label="Check for Service Worker" @click="checkServiceWorker"></q-btn>
       <q-btn icon="refresh" class="full-width mb30" color="primary" label="Refresh Page" @click="reloadPage"></q-btn>
       <q-btn color="positive" v-close-overlay class="full-width mb30" label="Mark All Bills As Paid" @click="markAllBillsAsPaid"></q-btn>
       <q-btn color="negative" v-close-overlay class="full-width mb30" label="Mark All Bills As Unpaid" @click="markAllBillsAsUnpaid"></q-btn>
@@ -21,7 +22,14 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { billsCollection, devicesCollection, messaging } from '@/firestoreConfig';
+import {
+  billsCollection,
+  devicesCollection,
+  messaging
+} from '@/firestoreConfig';
+
+//@ts-ignore
+import { Notify } from 'quasar-framework';
 
 @Component({
   components: {}
@@ -38,7 +46,7 @@ export default class Settings extends Vue {
         token = getToken;
         await devicesCollection.add({
           token: token
-        })
+        });
       } else {
         token = '';
       }
@@ -46,6 +54,31 @@ export default class Settings extends Vue {
     } catch (error) {
       console.log(error);
       return '';
+    }
+  }
+
+  async checkServiceWorker() {
+    try {
+      const swReg = await navigator.serviceWorker.getRegistration();
+      if (swReg !== undefined) {
+        console.log(`SW found for ${swReg.scope}`);
+        Notify.create({
+          type: 'info',
+          message: `SW found for ${swReg.scope}`
+        });
+      } else {
+        console.log('swReg is undefined');
+        Notify.create({
+          type: 'info',
+          message: `SW was not found`
+        });
+      }
+    } catch (error) {
+      console.log('Error getting sw registration', error);
+      Notify.create({
+        type: 'negative',
+        message: `Error getting sw registration, ${error}`
+      });
     }
   }
 

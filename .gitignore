@@ -74,3 +74,6 @@ typings/
 
 # dist directory
 dist
+
+#mapping files
+*.map
