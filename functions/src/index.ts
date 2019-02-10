@@ -8,6 +8,44 @@ export const tsTest = functions.https.onRequest((request, response) => {
   response.send('Hello from Firebase!');
 });
 
+export const markAutoPaidBillsAsPaid = functions.https.onRequest(
+  async (request, response) => {
+    const querySnapshot = await admin
+      .firestore()
+      .collection('billers')
+      .get();
+
+    const autoPaidBills: Bill[] = querySnapshot.docs
+      .map(doc => {
+        const data = doc.data();
+        return {
+          id: data.id,
+          isPaid: data.isPaid,
+          autoPay: data.autoPay,
+          dayOfMonth: data.dayOfMonth,
+          imageUrl: data.imageUrl,
+          title: data.title,
+          amount: data.amount
+        };
+      })
+      .filter(bill => bill.dayOfMonth === new Date().getDate())
+      .filter(bill => bill.autoPay);
+
+    if (autoPaidBills.length > 0) {
+      console.log('AutoPaidBills for today: ', autoPaidBills);
+      autoPaidBills.forEach(async bill => {
+        await admin
+          .firestore()
+          .collection('billers')
+          .doc(bill.id)
+          .update({ isPaid: true });
+      });
+    }
+
+    response.send('All auto paid bills were marked as paid :)');
+  }
+);
+
 export const checkBills = functions.https.onRequest(
   async (request, response) => {
     const querySnapshot = await admin
