@@ -8,6 +8,40 @@ export const tsTest = functions.https.onRequest((request, response) => {
   response.send('Hello from Firebase!');
 });
 
+export const markAllBillsAsUnpaid = functions.https.onRequest(
+  async (request, response) => {
+    const querySnapshot = await admin
+      .firestore()
+      .collection('billers')
+      .get();
+
+    const allBills: Bill[] = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: data.id,
+        isPaid: data.isPaid,
+        autoPay: data.autoPay,
+        dayOfMonth: data.dayOfMonth,
+        imageUrl: data.imageUrl,
+        title: data.title,
+        amount: data.amount
+      };
+    });
+
+    if (allBills.length > 0) {
+      allBills.forEach(async bill => {
+        await admin
+          .firestore()
+          .collection('billers')
+          .doc(bill.id)
+          .update({ isPaid: false });
+      });
+    }
+
+    response.send('All bills were marked as unpaid :)');
+  }
+);
+
 export const markAutoPaidBillsAsPaid = functions.https.onRequest(
   async (request, response) => {
     const querySnapshot = await admin
