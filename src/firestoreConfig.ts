@@ -17,14 +17,13 @@ const db = firebase.firestore();
 const settings = { timestampsInSnapshots: true };
 db.settings(settings);
 
-// firebase billers collection
 const billsCollection = db.collection('billers');
-// firebase devices collections
 const devicesCollection = db.collection('devices');
+const optionsCollection = db.collection('options');
 
 const messaging = firebase.messaging();
 navigator.serviceWorker.ready.then(swReg => {
   messaging.useServiceWorker(swReg);
 });
 
-export { db, billsCollection, devicesCollection, messaging };
+export { db, billsCollection, devicesCollection, optionsCollection, messaging };

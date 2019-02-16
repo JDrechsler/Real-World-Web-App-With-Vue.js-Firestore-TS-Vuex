@@ -4,24 +4,18 @@
       <div class="due-sign">
         <q-icon :name="dueIcon"></q-icon>
       </div>
-      <div class="due-text">
-        {{propbill.dayOfMonth}}
-      </div>
+      <div class="due-text">{{propbill.dayOfMonth}}</div>
     </div>
     <div class="card-biller-image">
-      <img :src="propbill.imageUrl" />
+      <img :src="propbill.imageUrl">
     </div>
-    <div class="card-biller-title">
-      {{propbill.title}}
-    </div>
-    <div class="card-biller-price" :class='getPriceClass()'>
-      ${{propbill.amount}}
-    </div>
+    <div class="card-biller-title">{{propbill.title}}</div>
+    <div :class="getPriceClass()" class="card-biller-price">${{propbill.amount}}</div>
   </q-card>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 const date = new Date();
 
@@ -56,24 +50,24 @@ export default class Card extends Vue {
 
   get dueIcon() {
     if (!this.propbill.isPaid && this.propbill.dayOfMonth < date.getDate())
-      return 'priority_high'; //report, error_outline
+      return "priority_high"; //report, error_outline
     if (!this.propbill.isPaid && this.propbill.dayOfMonth === date.getDate())
-      return 'error_outline';
+      return "error_outline";
     if (
       !this.propbill.isPaid &&
       this.propbill.dayOfMonth === date.getDate() + 1
     )
-      return 'notifications_none';
+      return "notifications_none";
     if (
       !this.propbill.isPaid &&
       this.propbill.dayOfMonth === date.getDate() + 2
     )
-      return 'notifications_none';
+      return "notifications_none";
     if (
       !this.propbill.isPaid &&
       this.propbill.dayOfMonth === date.getDate() + 3
     )
-      return 'notifications_none';
+      return "notifications_none";
   }
 }
 // @fts-check
@@ -83,7 +77,7 @@ export default class Card extends Vue {
 .q-card {
   display: grid !important;
   grid-template-columns: 1fr 2fr 2fr 1fr;
-  grid-template-areas: 'card-biller-due card-biller-image card-biller-title card-biller-price';
+  grid-template-areas: "card-biller-due card-biller-image card-biller-title card-biller-price";
   padding-right: 10px;
   margin-bottom: 10px;
   min-width: 250px;
@@ -98,9 +92,9 @@ export default class Card extends Vue {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
   grid-template-areas:
-    'biller-due-sign'
-    'card-biller-due'
-    '.';
+    "biller-due-sign"
+    "card-biller-due"
+    ".";
 }
 .due-text {
   justify-self: center;

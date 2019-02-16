@@ -1,45 +1,41 @@
 <template>
-
   <q-modal-layout>
     <q-toolbar slot="header">
-      <q-btn flat round dense v-close-overlay icon="keyboard_arrow_left"></q-btn>
-      <q-toolbar-title>
-        Settings
-      </q-toolbar-title>
-      Version 0.3
+      <q-btn dense flat icon="keyboard_arrow_left" round v-close-overlay></q-btn>
+      <q-toolbar-title>Settings</q-toolbar-title>Version 0.3
     </q-toolbar>
 
     <div class="layout-padding">
-      <q-btn icon="add_alert" class="full-width mb30" color="primary" label="Allow Push Notifications" @click="askForPermissionToReceiveNotifications"></q-btn>
-      <q-btn icon="feedback" class="full-width mb30" color="primary" label="Check for Service Worker" @click="checkServiceWorker"></q-btn>
-      <q-btn icon="refresh" class="full-width mb30" color="primary" label="Refresh Page" @click="reloadPage"></q-btn>
-      <q-btn color="positive" v-close-overlay class="full-width mb30" label="Mark All Bills As Paid" @click="markAllBillsAsPaid"></q-btn>
-      <q-btn color="negative" v-close-overlay class="full-width mb30" label="Mark All Bills As Unpaid" @click="markAllBillsAsUnpaid"></q-btn>
+      <q-btn @click="askForPermissionToReceiveNotifications" class="full-width mb30" color="primary" icon="add_alert" label="Allow Push Notifications"></q-btn>
+      <q-btn @click="checkServiceWorker" class="full-width mb30" color="primary" icon="feedback" label="Check for Service Worker"></q-btn>
+      <q-btn @click="reloadPage" class="full-width mb30" color="primary" icon="refresh" label="Refresh Page"></q-btn>
+      <q-btn @click="markAllBillsAsPaid" class="full-width mb30" color="positive" label="Mark All Bills As Paid" v-close-overlay></q-btn>
+      <q-btn @click="markAllBillsAsUnpaid" class="full-width mb30" color="negative" label="Mark All Bills As Unpaid" v-close-overlay></q-btn>
     </div>
-
   </q-modal-layout>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from "vue-property-decorator";
 import {
   billsCollection,
   devicesCollection,
   messaging
-} from '@/firestoreConfig';
+} from "@/firestoreConfig";
 
 //@ts-ignore
-import { Notify } from 'quasar-framework';
+import { Notify } from "quasar-framework";
+import { store } from "@/store";
 
 @Component({
   components: {}
 })
 export default class Settings extends Vue {
   async askForPermissionToReceiveNotifications() {
-    let token = '';
+    let token = "";
     try {
       await messaging.requestPermission();
-      console.log('Notification permission granted.');
+      console.log("Notification permission granted.");
       const getToken = await messaging.getToken();
       console.log(getToken);
       if (getToken !== null) {
@@ -48,12 +44,12 @@ export default class Settings extends Vue {
           token: token
         });
       } else {
-        token = '';
+        token = "";
       }
       return token;
     } catch (error) {
       console.log(error);
-      return '';
+      return "";
     }
   }
 
@@ -63,20 +59,20 @@ export default class Settings extends Vue {
       if (swReg !== undefined) {
         console.log(`SW found for ${swReg.scope}`);
         Notify.create({
-          type: 'info',
+          type: "info",
           message: `SW found for ${swReg.scope}`
         });
       } else {
-        console.log('swReg is undefined');
+        console.log("swReg is undefined");
         Notify.create({
-          type: 'info',
+          type: "info",
           message: `SW was not found`
         });
       }
     } catch (error) {
-      console.log('Error getting sw registration', error);
+      console.log("Error getting sw registration", error);
       Notify.create({
-        type: 'negative',
+        type: "negative",
         message: `Error getting sw registration, ${error}`
       });
     }
@@ -99,7 +95,7 @@ export default class Settings extends Vue {
   }
 
   get bills(): Bill[] {
-    return this.$store.state.bills;
+    return store.state.bills;
   }
 }
 </script>
