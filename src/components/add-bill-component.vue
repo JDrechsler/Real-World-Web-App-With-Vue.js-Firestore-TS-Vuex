@@ -1,57 +1,52 @@
 <template>
-
   <q-modal-layout>
     <q-toolbar slot="header">
-      <q-btn flat round dense v-close-overlay icon="keyboard_arrow_left"></q-btn>
-      <q-toolbar-title>
-        Add New Bill
-      </q-toolbar-title>
+      <q-btn dense flat icon="keyboard_arrow_left" round v-close-overlay></q-btn>
+      <q-toolbar-title>Add New Bill</q-toolbar-title>
     </q-toolbar>
 
     <div class="layout-padding">
-
       <card-comp :propbill="newBill"></card-comp>
 
       <q-field label="Auto Pay:">
-        <q-toggle v-model="newBill.autoPay" color='positive'></q-toggle>
+        <q-toggle color="positive" v-model="newBill.autoPay"></q-toggle>
       </q-field>
 
       <q-field label="Title:">
-        <q-input v-model="newBill.title" type="text"></q-input>
+        <q-input type="text" v-model="newBill.title"></q-input>
       </q-field>
 
       <q-field label="Amount:">
-        <q-input v-model="newBill.amount" type="number"></q-input>
+        <q-input type="number" v-model="newBill.amount"></q-input>
       </q-field>
 
       <q-field label="Day of Month:">
-        <q-input v-model="newBill.dayOfMonth" type="number"></q-input>
+        <q-input type="number" v-model="newBill.dayOfMonth"></q-input>
       </q-field>
 
       <q-field label="Paid Status:">
-        <q-toggle v-model="newBill.isPaid" color='positive'></q-toggle>
+        <q-toggle color="positive" v-model="newBill.isPaid"></q-toggle>
       </q-field>
 
       <q-field label="Image Url:">
-        <q-input v-model="newBill.imageUrl" type="url"></q-input>
+        <q-input type="url" v-model="newBill.imageUrl"></q-input>
       </q-field>
 
       <br>
-      <q-btn icon="add" v-close-overlay color='positive' class="full-width" @click="addBill">Add {{newBill.title}}</q-btn>
+      <q-btn @click="addBill" class="full-width" color="positive" icon="add" v-close-overlay>Add {{newBill.title}}</q-btn>
     </div>
-
   </q-modal-layout>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import Card from '@/components/card-component.vue';
-import { billsCollection } from '@/firestoreConfig';
+import { Component, Vue } from "vue-property-decorator";
+import Card from "@/components/card-component.vue";
+import { billsCollection } from "@/firestoreConfig";
 
 @Component({
   components: {
-    'card-comp': Card
+    "card-comp": Card
   }
 })
 export default class AddBill extends Vue {
@@ -60,10 +55,10 @@ export default class AddBill extends Vue {
     autoPay: false,
     dayOfMonth: 1,
     imageUrl:
-      'https://visualpharm.com/assets/432/iOS%20Application%20Placeholder-595b40b75ba036ed117d63a8.svg',
-    title: 'New Bill',
+      "https://visualpharm.com/assets/432/iOS%20Application%20Placeholder-595b40b75ba036ed117d63a8.svg",
+    title: "New Bill",
     amount: 0,
-    id: ''
+    id: ""
   };
 
   created() {
@@ -77,7 +72,7 @@ export default class AddBill extends Vue {
     if (this.newBill.title.trim()) {
       try {
         await billsCollection.doc(this.newBill.id).set(this.newBill);
-        console.log('added', this.newBill.title);
+        console.log("added", this.newBill.title);
       } catch (error) {
         console.log(error);
       }

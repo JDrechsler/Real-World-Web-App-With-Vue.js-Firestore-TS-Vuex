@@ -1,27 +1,21 @@
 <template>
-
   <q-modal-layout>
     <q-toolbar slot="header">
-      <q-btn flat round dense v-close-overlay icon="keyboard_arrow_left"></q-btn>
-      <q-toolbar-title>
-        Overview
-      </q-toolbar-title>
+      <q-btn dense flat icon="keyboard_arrow_left" round v-close-overlay></q-btn>
+      <q-toolbar-title>Overview</q-toolbar-title>
     </q-toolbar>
 
     <div class="layout-padding">
-
       <q-card>
         <q-list>
           <q-item>
             <q-item-side>
-              <q-item-tile color="positive" icon="add" />
+              <q-item-tile color="positive" icon="add"/>
             </q-item-side>
             <q-item-main>
               <q-item-tile label>1. Monthly Income:</q-item-tile>
               <q-item-tile sublabel>
-
-                <q-input prefix='$' type="number" v-model="firstMonthlyIncome"></q-input>
-
+                <q-input prefix="$" type="number" v-model="appOptions.income1"></q-input>
               </q-item-tile>
             </q-item-main>
           </q-item>
@@ -32,14 +26,12 @@
         <q-list>
           <q-item>
             <q-item-side>
-              <q-item-tile color="positive" icon="add" />
+              <q-item-tile color="positive" icon="add"/>
             </q-item-side>
             <q-item-main>
               <q-item-tile label>2. Monthly Income:</q-item-tile>
               <q-item-tile sublabel>
-
-                <q-input prefix='$' type="number" v-model="secondMonthlyIncome"></q-input>
-
+                <q-input prefix="$" type="number" v-model="appOptions.income2"></q-input>
               </q-item-tile>
             </q-item-main>
           </q-item>
@@ -50,7 +42,7 @@
         <q-list>
           <q-item>
             <q-item-side>
-              <q-item-tile color="red" icon="remove" />
+              <q-item-tile color="red" icon="remove"/>
             </q-item-side>
             <q-item-main>
               <q-item-tile label>Monthly amount for bills:</q-item-tile>
@@ -60,7 +52,7 @@
 
           <q-item>
             <q-item-side>
-              <q-item-tile color="primary" icon="arrow_forward" />
+              <q-item-tile color="primary" icon="arrow_forward"/>
             </q-item-side>
             <q-item-main>
               <q-item-tile label>Monthly money left:</q-item-tile>
@@ -70,23 +62,27 @@
         </q-list>
       </q-card>
 
+      <q-btn @click="updateOptions" class="full-width" color="positive" icon="add" v-close-overlay>Save Changes</q-btn>
     </div>
-
   </q-modal-layout>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from "vue-property-decorator";
+import { store } from "@/store";
+import { optionsCollection } from "@/firestoreConfig";
 
 @Component({})
 export default class Overview extends Vue {
-  firstMonthlyIncome: number = 2630;
-  secondMonthlyIncome: number = 2000;
-
-  get bills(): Bill[] {
-    return this.$store.state.bills;
+  get bills() {
+    return store.state.bills;
   }
+
+  get appOptions() {
+    return store.state.options;
+  }
+
   get getMonthlyAmountBills() {
     let amountAllBills = 0;
     for (let bill of this.bills) {
@@ -97,10 +93,21 @@ export default class Overview extends Vue {
 
   get getMonthlyMoneyLeft() {
     return (
-      this.firstMonthlyIncome +
-      this.secondMonthlyIncome -
+      this.appOptions.income1 +
+      this.appOptions.income2 -
       this.getMonthlyAmountBills
     );
+  }
+
+  async updateOptions() {
+    try {
+      await optionsCollection.doc("1").update({
+        income1: this.appOptions.income1,
+        income2: this.appOptions.income2
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 </script>

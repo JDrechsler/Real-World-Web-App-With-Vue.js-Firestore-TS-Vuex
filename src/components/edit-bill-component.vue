@@ -1,63 +1,59 @@
 <template>
-
   <q-modal-layout>
     <q-toolbar slot="header">
-      <q-btn flat round dense v-close-overlay icon="keyboard_arrow_left"></q-btn>
-      <q-toolbar-title>
-        Edit {{updatedBill.title}}
-      </q-toolbar-title>
+      <q-btn dense flat icon="keyboard_arrow_left" round v-close-overlay></q-btn>
+      <q-toolbar-title>Edit {{updatedBill.title}}</q-toolbar-title>
     </q-toolbar>
 
     <div class="layout-padding">
       <card-comp :propbill="updatedBill"></card-comp>
 
       <q-field label="Auto Pay:">
-        <q-toggle v-model="updatedBill.autoPay" color='positive'></q-toggle>
+        <q-toggle color="positive" v-model="updatedBill.autoPay"></q-toggle>
       </q-field>
 
       <q-field label="Title:">
-        <q-input v-model="updatedBill.title" type="text"></q-input>
+        <q-input type="text" v-model="updatedBill.title"></q-input>
       </q-field>
 
       <q-field label="Amount:">
-        <q-input v-model="updatedBill.amount" type="number"></q-input>
+        <q-input type="number" v-model="updatedBill.amount"></q-input>
       </q-field>
 
       <q-field label="Day of Month:">
-        <q-input v-model="updatedBill.dayOfMonth" type="number"></q-input>
+        <q-input type="number" v-model="updatedBill.dayOfMonth"></q-input>
       </q-field>
 
       <q-field label="Image Url:">
-        <q-input v-model="updatedBill.imageUrl" type="url"></q-input>
+        <q-input type="url" v-model="updatedBill.imageUrl"></q-input>
       </q-field>
 
       <q-field label="Paid Status:">
-        <q-toggle v-model="updatedBill.isPaid" color='positive'></q-toggle>
+        <q-toggle color="positive" v-model="updatedBill.isPaid"></q-toggle>
       </q-field>
 
       <br>
-      <q-btn color='positive' v-close-overlay class="full-width" @click="updateBill(updatedBill)">Save Changes to {{updatedBill.title}}</q-btn>
+      <q-btn @click="updateBill(updatedBill)" class="full-width" color="positive" v-close-overlay>Save Changes to {{updatedBill.title}}</q-btn>
       <br>
       <br>
-      <q-collapsible icon="delete" :label="'Delete ' + updatedBill.title + ' Bill'">
+      <q-collapsible :label="'Delete ' + updatedBill.title + ' Bill'" icon="delete">
         <div>
-          <q-btn color='negative' icon='delete' v-close-overlay @click="deleteBill(updatedBill)"></q-btn>
+          <q-btn @click="deleteBill(updatedBill)" color="negative" icon="delete" v-close-overlay></q-btn>
         </div>
       </q-collapsible>
-
     </div>
-
   </q-modal-layout>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import Card from '@/components/card-component.vue';
-import { billsCollection } from '@/firestoreConfig';
+import { Component, Vue, Prop } from "vue-property-decorator";
+import Card from "@/components/card-component.vue";
+import { billsCollection } from "@/firestoreConfig";
+import { store } from "@/store";
 
 @Component({
   components: {
-    'card-comp': Card
+    "card-comp": Card
   }
 })
 export default class EditBill extends Vue {
@@ -70,17 +66,17 @@ export default class EditBill extends Vue {
   updateBill(bill: Bill) {
     if (this.updatedBill.title.trim()) {
       billsCollection.doc(bill.id).update(bill);
-      console.log('updated', bill.title);
+      console.log("updated", bill.title);
     }
   }
 
   deleteBill(bill: Bill) {
     billsCollection.doc(bill.id).delete();
-    console.log('deleted', bill.title);
+    console.log("deleted", bill.title);
   }
 
   get bills(): Bill[] {
-    return this.$store.state.bills;
+    return store.state.bills;
   }
 }
 </script>

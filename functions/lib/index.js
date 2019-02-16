@@ -15,6 +15,66 @@ admin.firestore().settings({ timestampsInSnapshots: true });
 exports.tsTest = functions.https.onRequest((request, response) => {
     response.send('Hello from Firebase!');
 });
+exports.markAllBillsAsUnpaid = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
+    const querySnapshot = yield admin
+        .firestore()
+        .collection('billers')
+        .get();
+    const allBills = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: data.id,
+            isPaid: data.isPaid,
+            autoPay: data.autoPay,
+            dayOfMonth: data.dayOfMonth,
+            imageUrl: data.imageUrl,
+            title: data.title,
+            amount: data.amount
+        };
+    });
+    if (allBills.length > 0) {
+        allBills.forEach((bill) => __awaiter(this, void 0, void 0, function* () {
+            yield admin
+                .firestore()
+                .collection('billers')
+                .doc(bill.id)
+                .update({ isPaid: false });
+        }));
+    }
+    response.send('All bills were marked as unpaid :)');
+}));
+exports.markAutoPaidBillsAsPaid = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
+    const querySnapshot = yield admin
+        .firestore()
+        .collection('billers')
+        .get();
+    const autoPaidBills = querySnapshot.docs
+        .map(doc => {
+        const data = doc.data();
+        return {
+            id: data.id,
+            isPaid: data.isPaid,
+            autoPay: data.autoPay,
+            dayOfMonth: data.dayOfMonth,
+            imageUrl: data.imageUrl,
+            title: data.title,
+            amount: data.amount
+        };
+    })
+        .filter(bill => bill.dayOfMonth === new Date().getDate())
+        .filter(bill => bill.autoPay);
+    if (autoPaidBills.length > 0) {
+        console.log('AutoPaidBills for today: ', autoPaidBills);
+        autoPaidBills.forEach((bill) => __awaiter(this, void 0, void 0, function* () {
+            yield admin
+                .firestore()
+                .collection('billers')
+                .doc(bill.id)
+                .update({ isPaid: true });
+        }));
+    }
+    response.send('All auto paid bills were marked as paid :)');
+}));
 exports.checkBills = functions.https.onRequest((request, response) => __awaiter(this, void 0, void 0, function* () {
     const querySnapshot = yield admin
         .firestore()
