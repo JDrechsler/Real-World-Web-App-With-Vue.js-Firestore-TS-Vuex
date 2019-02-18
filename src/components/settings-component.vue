@@ -95,7 +95,7 @@ export default class Settings extends Vue {
   }
 
   get bills(): Bill[] {
-    return store.state.bills;
+    return store.bills;
   }
 }
 </script>

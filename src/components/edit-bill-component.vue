@@ -76,7 +76,7 @@ export default class EditBill extends Vue {
   }
 
   get bills(): Bill[] {
-    return store.state.bills;
+    return store.bills;
   }
 }
 </script>

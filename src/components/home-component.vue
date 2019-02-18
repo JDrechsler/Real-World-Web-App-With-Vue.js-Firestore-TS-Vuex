@@ -132,7 +132,7 @@ export default class Home extends Vue {
   }
 
   get bills(): Bill[] {
-    return store.state.bills;
+    return store.bills;
   }
 
   get getDateToday(): string {

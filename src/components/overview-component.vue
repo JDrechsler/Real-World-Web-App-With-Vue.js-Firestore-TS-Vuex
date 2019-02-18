@@ -76,11 +76,11 @@ import { optionsCollection } from "@/firestoreConfig";
 @Component({})
 export default class Overview extends Vue {
   get bills() {
-    return store.state.bills;
+    return store.bills;
   }
 
   get appOptions() {
-    return store.state.options;
+    return store.options;
   }
 
   get getMonthlyAmountBills() {

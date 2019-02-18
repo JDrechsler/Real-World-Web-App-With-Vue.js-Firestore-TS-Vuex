@@ -10,26 +10,24 @@ billsCollection.orderBy('dayOfMonth', 'asc').onSnapshot(querySnapshot => {
   });
 
   if (billsArray) {
-    store.state.bills = billsArray;
+    store.bills = billsArray;
   } else {
-    store.state.bills = [];
+    store.bills = [];
   }
 });
 
 optionsCollection.onSnapshot(querySnapshot => {
   let options = querySnapshot.docs[0].data();
   if (options) {
-    store.state.options.income1 = options.income1;
-    store.state.options.income2 = options.income2;
+    store.options.income1 = options.income1;
+    store.options.income2 = options.income2;
   }
 });
 
 export const store = Vue.observable({
-  state: {
-    bills: <Bill[]>[],
-    options: {
-      income1: 0,
-      income2: 0
-    }
+  bills: <Bill[]>[],
+  options: {
+    income1: 0,
+    income2: 0
   }
 });
