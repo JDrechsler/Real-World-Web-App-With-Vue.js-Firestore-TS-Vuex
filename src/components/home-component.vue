@@ -44,6 +44,10 @@
         <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="settingsModalOpened" v-model="settingsModalOpened">
           <settings-comp></settings-comp>
         </q-modal>
+
+        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" no-backdrop-dismiss no-esc-dismiss v-if="authModalOpened" v-model="authModalOpened">
+          <auth-comp></auth-comp>
+        </q-modal>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -57,6 +61,7 @@ import Overview from "@/components/overview-component.vue";
 import AddBill from "@/components/add-bill-component.vue";
 import EditBill from "@/components/edit-bill-component.vue";
 import { store } from "@/store";
+import Auth from "@/components/auth-component.vue";
 
 @Component({
   components: {
@@ -64,7 +69,8 @@ import { store } from "@/store";
     "card-comp": Card,
     "overview-comp": Overview,
     "add-bill-comp": AddBill,
-    "edit-bill-comp": EditBill
+    "edit-bill-comp": EditBill,
+    "auth-comp": Auth
   }
 })
 export default class Home extends Vue {
@@ -74,6 +80,7 @@ export default class Home extends Vue {
   editModalOpened: boolean = false;
   overviewModalOpened: boolean = false;
   settingsModalOpened: boolean = false;
+  authModalOpened: boolean = false;
   search: string = "string";
 
   selectedBill: Bill = this.createEmptyBill();
@@ -81,6 +88,7 @@ export default class Home extends Vue {
   created() {
     this.enableServiceWorker();
     this.checkAutoPayBills();
+    // this.authModalOpened = true;
   }
 
   enableServiceWorker() {

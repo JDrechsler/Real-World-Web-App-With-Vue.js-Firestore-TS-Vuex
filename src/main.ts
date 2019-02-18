@@ -2,13 +2,15 @@
 
 import Vue from 'vue';
 import App from './App.vue';
-import { store } from './store';
 
 import './styles/quasar.styl';
 import 'quasar-extras/material-icons';
 
 import Quasar, {
   QLayout,
+  QTabs,
+  QTab,
+  QTabPane,
   QBtn,
   QLayoutHeader,
   QToolbar,
@@ -38,6 +40,9 @@ import Quasar, {
 Vue.use(Quasar, {
   components: [
     QLayout,
+    QTabs,
+    QTab,
+    QTabPane,
     QBtn,
     QLayoutHeader,
     QToolbar,
@@ -67,6 +72,5 @@ Vue.use(Quasar, {
 Vue.config.productionTip = false;
 
 new Vue({
-  store,
   render: h => h(App)
 }).$mount('#app');

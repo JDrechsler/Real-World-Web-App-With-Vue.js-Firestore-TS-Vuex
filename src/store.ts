@@ -1,8 +1,5 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
 import { billsCollection, optionsCollection } from '@/firestoreConfig';
-
-Vue.use(Vuex);
 
 billsCollection.orderBy('dayOfMonth', 'asc').onSnapshot(querySnapshot => {
   let billsArray: Array<Bill> = [];
@@ -27,7 +24,7 @@ optionsCollection.onSnapshot(querySnapshot => {
   }
 });
 
-export const store = new Vuex.Store({
+export const store = Vue.observable({
   state: {
     bills: <Bill[]>[],
     options: {
