@@ -14,7 +14,7 @@
     }
   ],
   "start_url": "index.html",
-  "display": "fullscreen",
+  "display": "standalone",
   "background_color": "#027be3",
   "theme_color": "#027be3",
   "gcm_sender_id": "103953800507"
