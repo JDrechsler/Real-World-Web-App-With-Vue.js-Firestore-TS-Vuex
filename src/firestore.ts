@@ -1,18 +1,13 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/messaging';
+import 'firebase/auth';
+import { config } from './config';
 
-// Initialize Firebase
-const config = {
-  authDomain: 'billersapp.firebaseapp.com',
-  databaseURL: 'https://billersapp.firebaseio.com',
-  projectId: 'billersapp',
-  storageBucket: 'billersapp.appspot.com',
-  messagingSenderId: '5384173140'
-};
 firebase.initializeApp(config);
 
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 const settings = { timestampsInSnapshots: true };
 db.settings(settings);
@@ -26,4 +21,11 @@ navigator.serviceWorker.ready.then(swReg => {
   messaging.useServiceWorker(swReg);
 });
 
-export { db, billsCollection, devicesCollection, optionsCollection, messaging };
+export {
+  db,
+  auth,
+  billsCollection,
+  devicesCollection,
+  optionsCollection,
+  messaging
+};

@@ -8,44 +8,50 @@
 
     <q-page-container class="scroll-content">
       <q-page>
-        <div v-if="bills.length > 0">
-          <div :key="bill.id" v-for="bill in unpaidBills">
-            <card-comp :propbill="bill" @click.native="editSelectedBill(bill)" @contextmenu.native.prevent="editSelectedBill(bill)"></card-comp>
-          </div>
+        <div v-if="userIsAuthorized">
+          <div v-if="bills.length > 0">
+            <div :key="bill.id" v-for="bill in unpaidBills">
+              <card-comp :propbill="bill" @click.native="editSelectedBill(bill)" @contextmenu.native.prevent="editSelectedBill(bill)"></card-comp>
+            </div>
 
-          <hr>
+            <hr>
 
-          <div :key="bill.id" v-for="bill in paidBills">
-            <card-comp :propbill="bill" @click.native="editSelectedBill(bill)" @contextmenu.native.prevent="editSelectedBill(bill)"></card-comp>
+            <div :key="bill.id" v-for="bill in paidBills">
+              <card-comp :propbill="bill" @click.native="editSelectedBill(bill)" @contextmenu.native.prevent="editSelectedBill(bill)"></card-comp>
+            </div>
           </div>
+          <div v-else>No bills to show right now.</div>
+
+          <q-page-sticky :offset="[18, 18]" position="bottom-right">
+            <q-fab color="primary" direction="up" icon="add">
+              <q-fab-action @click="addModalOpened=true" class="white" color="blue" icon="add"></q-fab-action>
+              <q-fab-action @click="settingsModalOpened=true" class="white" color="blue" icon="settings"></q-fab-action>
+              <q-fab-action @click="overviewModalOpened=true" class="white" color="blue" icon="info"></q-fab-action>
+            </q-fab>
+          </q-page-sticky>
+
+          <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="addModalOpened" v-model="addModalOpened">
+            <add-bill-comp></add-bill-comp>
+          </q-modal>
+
+          <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="editModalOpened" v-model="editModalOpened">
+            <edit-bill-comp :propbill="selectedBill"></edit-bill-comp>
+          </q-modal>
+
+          <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="overviewModalOpened" v-model="overviewModalOpened">
+            <overview-comp></overview-comp>
+          </q-modal>
+
+          <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="settingsModalOpened" v-model="settingsModalOpened">
+            <settings-comp></settings-comp>
+          </q-modal>
         </div>
-        <div v-else>No bills to show right now.</div>
+        <div v-else>
+          <h5>You have to login before you can access any data.</h5>
+          <q-btn @click="openModalAuth" class="full-width mb30" color="primary" icon="account_circle" label="Change Account"></q-btn>
+        </div>
 
-        <q-page-sticky :offset="[18, 18]" position="bottom-right">
-          <q-fab color="primary" direction="up" icon="add">
-            <q-fab-action @click="addModalOpened=true" class="white" color="blue" icon="add"></q-fab-action>
-            <q-fab-action @click="settingsModalOpened=true" class="white" color="blue" icon="settings"></q-fab-action>
-            <q-fab-action @click="overviewModalOpened=true" class="white" color="blue" icon="info"></q-fab-action>
-          </q-fab>
-        </q-page-sticky>
-
-        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="addModalOpened" v-model="addModalOpened">
-          <add-bill-comp></add-bill-comp>
-        </q-modal>
-
-        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="editModalOpened" v-model="editModalOpened">
-          <edit-bill-comp :propbill="selectedBill"></edit-bill-comp>
-        </q-modal>
-
-        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="overviewModalOpened" v-model="overviewModalOpened">
-          <overview-comp></overview-comp>
-        </q-modal>
-
-        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" v-if="settingsModalOpened" v-model="settingsModalOpened">
-          <settings-comp></settings-comp>
-        </q-modal>
-
-        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" no-backdrop-dismiss no-esc-dismiss v-if="authModalOpened" v-model="authModalOpened">
+        <q-modal :content-css="{minWidth: '80vw', minHeight: '80vh'}" :value="modalAuthOpened" no-backdrop-dismiss no-esc-dismiss>
           <auth-comp></auth-comp>
         </q-modal>
       </q-page>
@@ -80,7 +86,6 @@ export default class Home extends Vue {
   editModalOpened: boolean = false;
   overviewModalOpened: boolean = false;
   settingsModalOpened: boolean = false;
-  authModalOpened: boolean = false;
   search: string = "string";
 
   selectedBill: Bill = this.createEmptyBill();
@@ -88,7 +93,6 @@ export default class Home extends Vue {
   created() {
     this.enableServiceWorker();
     this.checkAutoPayBills();
-    // this.authModalOpened = true;
   }
 
   enableServiceWorker() {
@@ -114,6 +118,10 @@ export default class Home extends Vue {
       });
   }
 
+  openModalAuth() {
+    store.options.modalAuthOpened = true;
+  }
+
   editSelectedBill(bill: Bill) {
     this.selectedBill = bill;
     this.editModalOpened = true;
@@ -131,8 +139,16 @@ export default class Home extends Vue {
     };
   }
 
+  get modalAuthOpened(): boolean {
+    return store.options.modalAuthOpened;
+  }
+
   get bills(): Bill[] {
     return store.bills;
+  }
+
+  get userIsAuthorized() {
+    return store.options.userIsAuthenticated;
   }
 
   get getDateToday(): string {

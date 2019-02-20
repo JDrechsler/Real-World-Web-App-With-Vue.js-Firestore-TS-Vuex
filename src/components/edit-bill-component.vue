@@ -48,7 +48,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import Card from "@/components/card-component.vue";
-import { billsCollection } from "@/firestoreConfig";
+import { billsCollection } from "@/firestore";
 import { store } from "@/store";
 
 @Component({

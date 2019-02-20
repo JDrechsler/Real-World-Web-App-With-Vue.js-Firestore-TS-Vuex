@@ -2,11 +2,12 @@
   <q-modal-layout>
     <q-toolbar slot="header">
       <q-btn dense flat icon="keyboard_arrow_left" round v-close-overlay></q-btn>
-      <q-toolbar-title>Settings</q-toolbar-title>Version 0.3
+      <q-toolbar-title>Settings</q-toolbar-title>Version 0.4
     </q-toolbar>
 
     <div class="layout-padding">
-      <q-btn @click="askForPermissionToReceiveNotifications" class="full-width mb30" color="primary" icon="add_alert" label="Allow Push Notifications"></q-btn>
+      <q-btn @click="openModalAuth" class="full-width mb30" color="primary" icon="account_circle" label="Change Account"></q-btn>
+      <q-btn @click="askForPermissionToReceiveNotifications" class="full-width mb30" color="primary" icon="add_alert" label="Get notified of upcoming bills"></q-btn>
       <q-btn @click="checkServiceWorker" class="full-width mb30" color="primary" icon="feedback" label="Check for Service Worker"></q-btn>
       <q-btn @click="reloadPage" class="full-width mb30" color="primary" icon="refresh" label="Refresh Page"></q-btn>
       <q-btn @click="markAllBillsAsPaid" class="full-width mb30" color="positive" label="Mark All Bills As Paid" v-close-overlay></q-btn>
@@ -17,11 +18,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import {
-  billsCollection,
-  devicesCollection,
-  messaging
-} from "@/firestoreConfig";
+import { billsCollection, devicesCollection, messaging } from "@/firestore";
 
 //@ts-ignore
 import { Notify } from "quasar-framework";
@@ -76,6 +73,10 @@ export default class Settings extends Vue {
         message: `Error getting sw registration, ${error}`
       });
     }
+  }
+
+  openModalAuth() {
+    store.options.modalAuthOpened = true;
   }
 
   reloadPage() {

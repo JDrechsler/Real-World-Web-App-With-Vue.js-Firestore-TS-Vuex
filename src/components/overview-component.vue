@@ -71,7 +71,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { store } from "@/store";
-import { optionsCollection } from "@/firestoreConfig";
+import { optionsCollection } from "@/firestore";
 
 @Component({})
 export default class Overview extends Vue {
