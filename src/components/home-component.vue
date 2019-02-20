@@ -68,6 +68,7 @@ import AddBill from "@/components/add-bill-component.vue";
 import EditBill from "@/components/edit-bill-component.vue";
 import { store } from "@/store";
 import Auth from "@/components/auth-component.vue";
+import { auth } from "@/firestore";
 
 @Component({
   components: {
@@ -93,6 +94,10 @@ export default class Home extends Vue {
   created() {
     this.enableServiceWorker();
     this.checkAutoPayBills();
+
+    if (auth.currentUser !== null) {
+      store.options.userIsAuthenticated = true;
+    }
   }
 
   enableServiceWorker() {
@@ -182,3 +187,12 @@ export default class Home extends Vue {
   background: linear-gradient(45deg, #6cfd9f, #6887ff);
 }
 </style>
+
+<style>
+body {
+  overscroll-behavior: contain;
+}
+</style>
+
+
+//TODO allow reload when logged in without loggin in again

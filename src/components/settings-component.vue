@@ -2,7 +2,7 @@
   <q-modal-layout>
     <q-toolbar slot="header">
       <q-btn dense flat icon="keyboard_arrow_left" round v-close-overlay></q-btn>
-      <q-toolbar-title>Settings</q-toolbar-title>Version 0.4
+      <q-toolbar-title>Settings</q-toolbar-title>Version 0.4.3
     </q-toolbar>
 
     <div class="layout-padding">

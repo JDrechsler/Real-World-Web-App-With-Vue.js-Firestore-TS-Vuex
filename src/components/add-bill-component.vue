@@ -55,7 +55,7 @@ export default class AddBill extends Vue {
     autoPay: false,
     dayOfMonth: 1,
     imageUrl:
-      "https://visualpharm.com/assets/432/iOS%20Application%20Placeholder-595b40b75ba036ed117d63a8.svg",
+      "https://www.movebumpers.com/pub/design/add-image-placeholder-icon.svg",
     title: "New Bill",
     amount: 0,
     id: ""

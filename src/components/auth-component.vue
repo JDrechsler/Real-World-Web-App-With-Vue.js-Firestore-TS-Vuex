@@ -45,21 +45,16 @@ export default class Auth extends Vue {
         this.email,
         this.password
       );
-      console.log(`Logging in as: ${this.email}`);
       console.log("Logged in succesfully as: ", userCredential.user!.email);
       this.fetchFromFirebase();
       store.options.modalAuthOpened = false;
-      console.log(`Current user: ${auth.currentUser!.email}`);
       store.options.userIsAuthenticated = true;
-      Notify.create({
-        type: "positive",
-        message: `Welcome, ${auth.currentUser!.email}!`
-      });
     } catch (ex) {
       console.log(ex.message);
       Notify.create({
         type: "negative",
-        message: ex.message
+        message: ex.message,
+        position: "center"
       });
     }
   }
