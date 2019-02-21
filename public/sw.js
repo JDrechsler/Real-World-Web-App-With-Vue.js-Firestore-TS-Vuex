@@ -8,17 +8,19 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
-const staticCache = 'bills-static-cache-1';
+const staticCache = 'bills-static-cache-6';
 const staticUrlsToCache = [
-  './',
-  './app.css',
-  './chunk-vendors.css',
-  './app.js',
-  './chunk-vendors.js',
-  './manifest.json',
-  './icon.png',
-  './icon_192.png',
-  './sw.js'
+  '/',
+  '/index.html',
+  '/css/app.css',
+  '/css/chunk-vendors.css',
+  '/js/app.js',
+  '/js/chunk-vendors.js',
+  '/manifest.json',
+  '/img/icons/icon.png',
+  '/img/icons/icon_192.png',
+  '/fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff',
+  '/fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2'
 ];
 
 const cacheStaticResources = async () => {
@@ -58,7 +60,7 @@ const useResourceStrategy = async request => {
   }
 };
 
-self.addEventListener('install', (/** @type {ExtendableEvent} */ event) => {
+self.addEventListener('install', event => {
   console.log('SW: Install Event');
   event.waitUntil(cacheStaticResources());
 });
@@ -67,8 +69,6 @@ self.addEventListener('activate', () => {
   console.log('SW: Activate Event');
 });
 
-self.addEventListener('fetch', (/** @type {FetchEvent} */ event) => {
-  if (event.request.url.startsWith(self.location.origin)) {
-    event.respondWith(useResourceStrategy(event.request));
-  }
+self.addEventListener('fetch', event => {
+  event.respondWith(useResourceStrategy(event.request));
 });

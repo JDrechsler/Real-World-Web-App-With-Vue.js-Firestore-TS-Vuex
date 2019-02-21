@@ -196,3 +196,4 @@ body {
 
 
 //TODO allow reload when logged in without loggin in again
+//TODO remove unused code...test using quasar framework alternative to reduce size...maybe use css only
